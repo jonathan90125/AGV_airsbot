@@ -1,0 +1,18 @@
+gmapping:
+roslaunch my_robot_name_2dnav rosbag_gmapping.launch
+rosrun map_server map_saver map_bag1
+
+
+
+
+slam-toolbox:
+roslaunch slam_toolbox online_sync.launch
+rosservice call /write_state "{filename: /home/lxz/.ros/map_bag1.pbstream}"
+
+
+
+
+cartographer:
+roslaunch cartographer_ros demo_revo_lds.launch
+rosrun slam_toolbox service_client
+

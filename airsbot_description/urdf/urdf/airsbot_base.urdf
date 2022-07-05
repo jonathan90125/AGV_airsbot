@@ -1,0 +1,50 @@
+<?xml version="1.0" ?>
+<robot name="mbot">
+
+    <link name="base_link">
+        <visual>
+            <origin xyz=" 0 0 0" rpy="0 0 0" />
+            <geometry>
+                <cylinder length="0.16" radius="0.20"/>
+            </geometry>
+            <material name="yellow">
+                <color rgba="1 0.4 0 1"/>
+            </material>
+        </visual>
+    </link>
+
+     
+
+    <link name="laser">
+		<visual>
+			<origin xyz=" 0 0 0 " rpy="0 0 0" />
+			<geometry>
+				<cylinder length="0.05" radius="0.05"/>
+			</geometry>
+			<material name="black"/>
+		</visual>
+    </link>
+    <joint name="laser_joint" type="fixed">
+        <origin xyz="0.2 0 0.105" rpy="0 0 0"/>
+        <parent link="base_link"/>
+        <child link="laser"/>
+    </joint>
+
+
+    <link name="camera_link">
+		<visual>
+			<origin xyz=" 0 0 0 " rpy="0 0 0" />
+			<geometry>
+				<cylinder length="0.05" radius="0.05"/>
+			</geometry>
+			<material name="black"/>
+		</visual>
+    </link>
+
+    <joint name="camera_joint" type="fixed">
+        <origin xyz="0.2 0 0.105" rpy="0 0 0"/>
+        <parent link="base_link"/>
+        <child link="camera_link"/>
+    </joint>
+
+</robot>

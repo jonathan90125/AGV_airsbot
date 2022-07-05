@@ -1,0 +1,13 @@
+<launch>
+
+<node pkg="modbustcp" type="tcp_node" name="tcp_node" output="screen">
+
+</node>
+<include file="$(find airsbot_description)/launch/urdf/display_airsbot.launch"/>
+ 
+<node pkg="mcu_handler" type="publish_node1" name="publish_node1" output="screen">
+
+</node>
+ 
+
+</launch> 

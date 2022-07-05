@@ -1,0 +1,11 @@
+# vs related
+.vscode
+
+# catkin related
+devel/
+logs/
+build/
+
+# clion related
+.idea/
+cmake-build-debug/

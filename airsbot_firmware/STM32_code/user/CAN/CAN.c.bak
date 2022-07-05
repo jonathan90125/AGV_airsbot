@@ -1,0 +1,112 @@
+
+
+
+#include "stm32f10x_can.h"
+#include "CAN.h"
+#include "misc.h"
+
+/*
+  CAN Config
+  返回：成功 0 ，失败 1
+*/
+uint8_t CAN_Config(void)
+{
+    u8 Error;
+    GPIO_InitTypeDef GPIO_InitStructure;
+    CAN_InitTypeDef        CAN_InitStructure;
+    CAN_FilterInitTypeDef  CAN_FilterInitStructure;
+	NVIC_InitTypeDef NVIC_InitStructure;
+
+    /* 打开GPIOA时钟、AFIO时钟，CAN时钟 */
+	RCC_APB2PeriphClockCmd(RCC_APB2Periph_GPIOA | RCC_APB2Periph_AFIO, ENABLE);
+	RCC_APB1PeriphClockCmd(RCC_APB1Periph_CAN1, ENABLE);
+
+	/* CAN RX PA11 */
+	GPIO_InitStructure.GPIO_Pin = GPIO_Pin_11;
+	GPIO_InitStructure.GPIO_Mode = GPIO_Mode_IPU;
+	GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;
+	GPIO_Init(GPIOA, &GPIO_InitStructure);
+	/* CAN TX PA12 */
+	GPIO_InitStructure.GPIO_Pin = GPIO_Pin_12;
+	GPIO_InitStructure.GPIO_Mode = GPIO_Mode_AF_PP;
+	GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;
+	GPIO_Init(GPIOA, &GPIO_InitStructure);
+
+    /* Enabling interrupt */
+    NVIC_InitStructure.NVIC_IRQChannel=USB_LP_CAN1_RX0_IRQn;
+    NVIC_InitStructure.NVIC_IRQChannelPreemptionPriority = 0;
+    NVIC_InitStructure.NVIC_IRQChannelSubPriority = 0;
+    NVIC_InitStructure.NVIC_IRQChannelCmd = ENABLE;
+    NVIC_Init(&NVIC_InitStructure);
+
+    /* CAN  BaudRate = RCC_APB1PeriphClock/(CAN_SJW+CAN_BS1+CAN_BS2)/CAN_Prescaler */
+	CAN_DeInit(CAN1);
+    CAN_StructInit(&CAN_InitStructure);   
+
+    CAN_InitStructure.CAN_TTCM=DISABLE;
+    CAN_InitStructure.CAN_ABOM=DISABLE;
+    CAN_InitStructure.CAN_AWUM=DISABLE;
+    CAN_InitStructure.CAN_NART=DISABLE;
+    CAN_InitStructure.CAN_RFLM=DISABLE;
+    CAN_InitStructure.CAN_TXFP=DISABLE;
+    CAN_InitStructure.CAN_Mode=CAN_Mode_Normal;   
+	//CAN_InitStructure.CAN_Mode=CAN_Mode_LoopBack;
+    CAN_InitStructure.CAN_SJW=CAN_SJW_1tq;
+    CAN_InitStructure.CAN_BS1=CAN_BS1_8tq;
+    CAN_InitStructure.CAN_BS2=CAN_BS2_7tq;
+    CAN_InitStructure.CAN_Prescaler=18;//9;		  // 波特率分频器 250K
+    Error =CAN_Init(CAN1,&CAN_InitStructure);
+    if(Error == 0)
+        return 1;											
+
+    CAN_FilterInitStructure.CAN_FilterNumber=0;
+    CAN_FilterInitStructure.CAN_FilterMode=CAN_FilterMode_IdMask;	 // 标识符屏蔽位模式
+    CAN_FilterInitStructure.CAN_FilterScale=CAN_FilterScale_32bit;   // 32位过滤器
+    CAN_FilterInitStructure.CAN_FilterIdHigh=0x0000;			// 过滤器标识符
+    CAN_FilterInitStructure.CAN_FilterIdLow=0x0000;				
+    CAN_FilterInitStructure.CAN_FilterMaskIdHigh=0x0000;		// 过滤器屏蔽标识符
+    CAN_FilterInitStructure.CAN_FilterMaskIdLow=0x0000;
+    CAN_FilterInitStructure.CAN_FilterFIFOAssignment=CAN_FIFO0;	 // FIFO0指向过滤器
+    CAN_FilterInitStructure.CAN_FilterActivation=ENABLE;
+    CAN_FilterInit(&CAN_FilterInitStructure);
+
+    CAN_ITConfig(CAN1,CAN_IT_FMP0,ENABLE);
+
+	return 0;
+}
+
+/*
+  收发器配置
+*/
+void CAN_GotoNormal(void)
+{
+    GPIO_InitTypeDef GPIO_InitStructure;
+
+    /* 打开收发器引脚时钟 */
+	RCC_APB2PeriphClockCmd(RCC_APB2Periph_GPIOA | RCC_APB2Periph_GPIOB, ENABLE);
+
+    GPIO_PinRemapConfig(GPIO_Remap_SWJ_JTAGDisable, ENABLE);   // 失能JTAG，使用JTDI JNTRST 引脚
+	/* PB4 TJA1054 /STB */
+	GPIO_InitStructure.GPIO_Pin = GPIO_Pin_4;				   
+	GPIO_InitStructure.GPIO_Mode = GPIO_Mode_Out_PP;
+	GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;
+	GPIO_Init(GPIOB, &GPIO_InitStructure);
+
+	/* PA15 TJA1054 EN */
+	GPIO_InitStructure.GPIO_Pin = GPIO_Pin_15;				   
+	GPIO_InitStructure.GPIO_Mode = GPIO_Mode_Out_PP;
+	GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;
+	GPIO_Init(GPIOA, &GPIO_InitStructure);
+
+	/* PB11 TJA1054 /ERR */
+	GPIO_InitStructure.GPIO_Pin = GPIO_Pin_11;				   
+	GPIO_InitStructure.GPIO_Mode = GPIO_Mode_IPU;
+	GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;
+	GPIO_Init(GPIOB, &GPIO_InitStructure);
+
+
+	// TJA1054 配置
+	EN_H();
+	STB_H();
+}
+

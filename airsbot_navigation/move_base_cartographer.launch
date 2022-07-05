@@ -1,0 +1,15 @@
+<launch>
+
+   <master auto="start"/>
+     
+   <include file="$(find cartographer_ros)/launch/demo_backpack_2d_localization.launch"/>
+ 
+    <node pkg="move_base" type="move_base" respawn="false" name="move_base" output="screen">
+    <rosparam file="$(find airsbot_navigation)/costmap_common_params.yaml" command="load" ns="global_costmap" /> 
+    <rosparam file="$(find airsbot_navigation)/costmap_common_params.yaml" command="load" ns="local_costmap" />
+    <rosparam file="$(find airsbot_navigation)/local_costmap_params.yaml" command="load" />
+    <rosparam file="$(find airsbot_navigation)/global_costmap_params.yaml" command="load" /> 
+    <rosparam file="$(find airsbot_navigation)/base_local_planner_params.yaml" command="load" />
+ </node>
+
+</launch> 

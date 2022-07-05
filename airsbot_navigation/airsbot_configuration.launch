@@ -1,0 +1,19 @@
+<launch>
+
+
+<include file="$(find ltme_node)/launch/ltme02a.launch"/>
+<include file="$(find astra_camera)/launch/astra.launch"/>
+<include file="$(find airsbot_description)/launch/urdf/display_airsbot.launch"/>
+ 
+
+<node pkg="mcu_handler" type="publish_node1" name="publish_node1" output="screen">
+
+</node>
+
+
+<node pkg="robot_setup_tf" type="tf_broadcaster" name="tf_broadcaster" output="screen">
+     
+</node>
+ 
+
+</launch> 

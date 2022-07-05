@@ -1,0 +1,11 @@
+rostopic pub /cmd_vel geometry_msgs/Twist -r 10 [0,0.0,0.0] [0.0,0.0,0.1]
+
+
+
+
+
+sudo chmod 777 /dev/ttyUSB0 
+cd catkin_ws 
+source devel/setup.bash
+rosrun test01 publish_node1
+
