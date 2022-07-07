@@ -2,7 +2,7 @@
 
 This is the repo of **airsbot** which is an AGV of two versions, the indoor version and the outdoor version.
 
-<img src=".\airsbot_doc\1.JPG" alt="1" style="zoom:8%;" />        <img src=".\airsbot_doc\2.JPG" alt="2" style="zoom:8%;" />    
+<img src=".\airsbot_doc\1.JPG" alt="1" style="zoom:2%;" />        <img src=".\airsbot_doc\2.JPG" alt="2" style="zoom:2%;" />    
 
 ## 0. Architecture
 ### 0.1. System Architecture
