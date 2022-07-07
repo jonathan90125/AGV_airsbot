@@ -1,6 +1,6 @@
 # Airsbot
 
-This is the repo of **airsbot** which is an AGV of two versions, which are the **indoor** version and the **outdoor** version.
+This is the repo of **airsbot** which is an AGV of two versions, which are the **indoor** version and the **outdoor** version. 
 
 <img src=".\airsbot_doc\1.JPG" alt="1" style="zoom:8%;" />        <img src=".\airsbot_doc\2.JPG" alt="2" style="zoom:8%;" />    
 
@@ -37,7 +37,7 @@ Clone **airsbot** into `src` folder. It is noted that `DIR_AIRSBOT` is the targe
 
     $ mkdir -p {DIR_AIRSBOT}/src 
     $ cd {DIR_AIRSBOT}/src
-    $ git clone https://gitlab.com/hcchou/airsbot.git
+    $ git clone https://github.com/jonathan90125/AGV_airsbot.git
 
 ### 1.3. Dependencies Installation
 
@@ -103,41 +103,7 @@ Project IDE: Keil C, version xxx
         $ end byte1: 0x0d
         $ end byte2: 0x0a
 
-## 5. Development Rules  
-### 5.1. Pull the updated main branch
-Check git status by
 
-    $ cd {DIR_AIRSBOT}  
-    $ git status
 
-Then, the following messages are shown
 
-    On branch xxx
 
-If the current branch is not on **main** branch, checkout **main** branch by the following  
-
-    $ git checkout main
-
-Pull the **updated** main branch
-
-    $ git pull origin main
-
-### 5.2. Create a new branch based on main branch. 
-The **naming rule** of a new branch is ${DEVELOPER/NAME_OF_BRANCH}, for example **"zhouhongjun/dev"**
-
-    $ git branch zhouhongjun/dev
-
-And checkout the branch  
-
-    $ git checkout zhouhongjun/dev
-
-Always modify and push your code **on your branch**.
-
-### 5.3. Create merge request via Gitlab web GUI 
-The purpose of merge request is to **merge your development code into main codebase**. Please do verification, such as **compiling** and **conflict resolving,** carefully.  
-
-**Link:** https://gitlab.com/hcchou/airsbot/-/merge_requests  
-
-### 5.4. Recommended git GUI
-**Ubuntu:** gitkraken  
-**Windows:** Source tree (free)  
