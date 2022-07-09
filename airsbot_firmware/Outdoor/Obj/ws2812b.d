@@ -1,0 +1,15 @@
+.\obj\ws2812b.o: user\ws2812\WS2812B.c
+.\obj\ws2812b.o: user\ws2812\WS2812B.h
+.\obj\ws2812b.o: .\user\stm32f10x.h
+.\obj\ws2812b.o: .\user\core_cm3.h
+.\obj\ws2812b.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\stdint.h
+.\obj\ws2812b.o: .\user\system_stm32f10x.h
+.\obj\ws2812b.o: .\user\stm32f10x_conf.h
+.\obj\ws2812b.o: .\FWlib\inc\stm32f10x_gpio.h
+.\obj\ws2812b.o: .\user\stm32f10x.h
+.\obj\ws2812b.o: .\FWlib\inc\stm32f10x_rcc.h
+.\obj\ws2812b.o: .\user\delay\delay.h
+.\obj\ws2812b.o: .\user\mbot\mbotLinuxUsart.h
+.\obj\ws2812b.o: .\user\sys\sys.h
+.\obj\ws2812b.o: .\FWlib\inc\stm32f10x_tim.h
+.\obj\ws2812b.o: .\FWlib\inc\stm32f10x_dma.h
