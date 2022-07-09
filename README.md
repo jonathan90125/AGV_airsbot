@@ -18,6 +18,18 @@ The major difference of two robots is their firmware. They both use in-wheel mot
 
 ![](./airsbot_doc/software_architecture.png)
 
+**airsbot_base**:负责与MCU进行通讯，读取里程计和传感器信息并发布至相应topic，接收 cmd_vel 话题中传来的twist 消息并转换为两轮速度指令传递给MCU，同时负责处理和发布 base_link到odom的tf变换。
+
+ **airsbot_sensor**: LTME-02A激光雷达和 ASTRA-MINI-028 深度相机的配置和启动文件。
+
+ **airsbot_description**:包含底盘以及相机和雷达的URDF文件，实现base_link到laser_link和 camera_link的tf变换。 
+
+**airsbot_interface**:与调度层之间进行Modbus-tcp通信，实现云端对底盘的控制和状态监控。
+
+ **airsbot_tool**：负责模拟测试，如发送cmd_vel指令，设置navigation_goal，模拟调度层client 端。 
+
+**airsbot_slam, airsbot_navigation**:负责底盘的建图与导航，在下个部分详细说明。
+
 ### 1. Installation
 
 **Airsbot** has tested on machines with the following configurations  
@@ -113,5 +125,20 @@ Project IDE: Keil C, version 5
 
 ## Slave Computer
 
+MCU采用的是STM32F105VCT6芯片，主要负责的内容如下：
 
+### Indoor
 
+1. 与轮毂电机的CAN通信实现对电机速度与位置的控制和实时读取
+2. 对IMU和超声波测距数据的读取
+3. 完成差速底盘的实时里程计计算
+4. 实现手柄对底盘的遥控
+5. 与上位机进行RS232通信，接收上位机控制指令并回传里程计和传感器信息
+
+### Outdoor
+
+1. 与轮毂电机的CAN通信实现对电机速度与位置的控制和实时读取
+2. 对IMU和超声波测距数据的读取
+3. 完成差速底盘的实时里程计计算
+4. 实现手柄对底盘的遥控
+5. 与上位机进行RS232通信，接收上位机控制指令并回传里程计和传感器信息
