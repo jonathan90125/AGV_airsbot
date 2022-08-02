@@ -74,6 +74,16 @@ int main(int argc, char** argv){
     odom_pub.publish(odom);
 
     last_time = current_time;
+     broadcaster.sendTransform(
+      tf::StampedTransform(
+        tf::Transform(tf::Quaternion(0, 0, 0, 1), tf::Vector3(0.2, 0, 0.1)),
+        ros::Time::now(),"base_link", "laser"));
+    
+     camera_caster.sendTransform(
+      tf::StampedTransform(
+        tf::Transform(tf::Quaternion(0, 0, 0, 1), tf::Vector3(0.2, 0, 0.1)),
+        ros::Time::now(),"base_link", "camera_link"));
+
     
     r.sleep();
   }

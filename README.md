@@ -40,70 +40,147 @@ Three different open source schemes are used for map building and positioning, i
 
 <div align=center><img src=".\airsbot_doc\4.png" alt="4" width="600" /></div>    
 
-### 1. Installation
+## 1. Installation
 
 **Airsbot** has tested on machines with the following configurations  
+
 * Ubuntu 18.04.5 LTS + ROS melodic
 
-#### 1.1. Ros melodic installation
+### 1.1. Ros melodic installation
+
 Either check official installation tutorial [http://wiki.ros.org/melodic/Installation/Ubuntu](http://wiki.ros.org/melodic/Installation/Ubuntu) or follow the command lines below
 
     $ sudo sh -c 'echo "deb http://packages.ros.org/ros/ubuntu $(lsb_release -sc) main" > /etc/apt/sources.list.d/ros-latest.list'
-    $ sudo apt install curl # if you haven't already installed curl
+    $ sudo apt install curl
     $ curl -s https://raw.githubusercontent.com/ros/rosdistro/master/ros.asc | sudo apt-key add -
     $ sudo apt update
     $ sudo apt install ros-melodic-desktop-full
     $ echo "source /opt/ros/melodic/setup.bash" >> ~/.bashrc
     $ source ~/.bashrc
-    $ sudo apt install python-rosdep python-rosinstall python-rosinstall-generator python-wstool build-essential
+    $ sudo apt install python-rosdep python-rosinstall python-rosinstall-generator python-wstool build-essential python-catkin-tools
     $ sudo apt install python-rosdep
     $ sudo rosdep init
     $ rosdep update
 
-#### 1.2. Clone airsbot project
+### 1.2. Clone airsbot project
 
 Clone **airsbot** into `src` folder. It is noted that `DIR_AIRSBOT` is the target directory of airsbot project. `DIR_AIRSBOT` could be either catkin workspace or other directories. 
 
     $ mkdir -p {DIR_AIRSBOT}/src 
     $ cd {DIR_AIRSBOT}/src
-    $ git clone https://github.com/jonathan90125/AGV_airsbot.git
+    $ git clone https://github.com/jonathan90125/AGV_airsbot
 
-#### 1.3. Dependencies Installation
+### 1.3. Dependencies Installation
 
     $ cd ..
     $ rosdep install -q -y -r --from-paths src --ignore-src
 
-### 2. Compile 
-Build **airsbot** by catkin tool 
+### 1.4. Install and compile modbus library
+
+    $ cd {DIR_AIRSBOT}/src/airsbot/airsbot_script
+    $ bash install_modbus.sh
+
+### 1.5. Install Cartographer libraries
+
+    $ sudo apt-get install -y ninja-build stow libgoogle-glog-dev libsuitesparse-dev liblua5.2-dev python-sphinx ros-melodic-ar-track-alvar
+    $ bash install_abseil.sh
+    $ bash install_ceres.sh
+
+### 1.6. Install camera and lidar
+
+Camera:
+
+```
+ $ cd {DIR_AIRSBOT}/src/airsbot/airsbot_script
+ $ bash install_camera.sh
+```
+
+if you see a window displaying rgb graph from camera, this means the installation has succeeded, just close the window.
+
+Lidar:
+	Change wired network IPv4 address to 192.168.10.10, and netmask to 255.255.255.0 
+
+
+## 2. Compile airsbot project
+
+### 2.1. Build airsbot by catkin tool
 
     $ cd {DIR_AIRSBOT}
-    $ catkin_make
+    $ catkin build
 
 And source the directory 
 
     $ source devel/setup.bash
 
-### 3. Run Packages (need further verification)  
-#### 3.1. Run airsbot_base
-    $ source devel/setup.bash
-    $ roslaunch move_base airsbot_move_base.launch
-#### 3.2. Run Gmapping  
-Cartographer has shown better performance. Implemented but stop maintaining.
-#### 3.3. Run Google Cartographer  
-    $ source devel/setup.bash
-    $ roslaunch cartographer_ros airsbot_cartographer.launch
-#### 3.4. Run Slam_toolbox  
-Cartographer has shown better performance. Implemented but stop maintaining.
-#### 3.5. Run Move_base Navigation
-    $ source devel/setup.bash
-    $ roslaunch move_base airsbot_move_base.launch
+### 2.2. Protobuf issue
 
-### 4. Firmware
+If **protobuf** related issues occur, try the following steps.
+
+    $ cd {DIR_AIRSBOT}/src/airsbot/airsbot_script
+    $ bash install_proto.sh
+    $ sudo mv /usr/bin/protoc /usr/bin/protoc.bak
+    $ sudo cp /usr/local/bin/protoc /usr/bin
+
+## 3. Run Packages  
+
+### 3.1. Run airsbot_base
+
+    $ cd /dev
+    $ sudo chmod 777 ttyUSB0
+
+then
+
+```
+ $ source devel/setup.bash
+ $ rosrun mcu_handler mcu_node
+ $ rosrun robot_setup_tf tf_broadcaster
+```
+
+or simply run.
+
+```
+$ source devel/setup.bash
+$ roslaunch airsbot_navigation airsbot_configuration.launch
+```
+
+
+
+### 3.2. Run Gmapping  
+
+Implemented, but Cartographer shows better performance. Stop maintaining.
+
+### 3.3. Run Google Cartographer  
+
+For mapping and saving map.
+
+    $ source devel/setup.bash
+    $ roslaunch cartographer_ros demo_revo_lds.launch
+    $ rosservice call /write_state "{filename:  path/name.pbstream}"
+
+For localization.
+
+```
+$ source devel/setup.bash
+$ roslaunch cartographer_ros demo_backpack_2d_localization.launch
+```
+
+### 3.4. Run Slam_toolbox  
+
+Implemented, but Cartographer shows better performance. Stop maintaining.
+
+### 3.5. Run Move_base Navigation
+
+    $ source devel/setup.bash
+    $ roslaunch airsbot_navigation move_base_cartographer.launch
+
+## 4. Firmware
+
 The related MCU codes are in airsbot_firmware package.  
 MCU model: STM32F105VCT6 
-Project IDE: Keil C, version 5
+Project IDE: Keil uVision5
 
-#### 4.1. Communication Protocol
+### 4.1. Communication Protocol
+
 **TX message,** from MCU to host computer  
 
     Length: 19 bytes, 152 bits
@@ -132,6 +209,88 @@ Project IDE: Keil C, version 5
         $ checksum:  CRC-8
         $ end byte1: 0x0d
         $ end byte2: 0x0a
+
+## 5. Development Rules  
+
+### 5.1. Pull the updated main branch
+
+Check git status by
+
+    $ cd {DIR_AIRSBOT}  
+    $ git status
+
+Then, the following messages are shown
+
+    On branch xxx
+
+If the current branch is not on **main** branch, checkout **main** branch by the following  
+
+    $ git checkout main
+
+Pull the **updated** main branch
+
+    $ git pull origin main
+
+### 5.2. Create a new branch based on main branch. 
+
+The **naming rule** of a new branch is `${DEVELOPER/NAME_OF_BRANCH},` for example `zhouhongjun/dev`
+
+    $ git branch zhouhongjun/dev
+
+And checkout the branch  
+
+    $ git checkout zhouhongjun/dev
+
+Always modify and push your code **on your branch**. 
+
+## 6. Cartographer Configurations and Launch Files for mr500 Robots
+
+### 6.1. Preparations
+
+For offline tests, find dataset under `/Workspace/Dataset/mr500/mr500+gps/mr500_experiment_bag`
+
+### 6.2. Clone mr500 config files  
+
+	$ sudo apt-get install python-vcstool
+	$ cd {DIR_AIRSBOT}/src
+	$ vcs-import < airsbot/dependencies.yaml
+
+And build by catkin build
+
+	$ catkin build
+	$ source devel/setup.bash
+
+### 6.3. Mapping  
+
+	$ roslaunch cartographer_mr500 demo_mr500_3d.launch bag_filename:=${ROSBAG_DIR}/2021-05-21-15-14-09.bag
+
+### 6.4. Pure localization mode
+
+Reference: `https://google-cartographer-ros.readthedocs.io/en/latest/demos.html`
+
+	$ roslaunch cartographer_mr500 offline_mr500_3d.launch bag_filenames:=${ROSBAG_DIR}/2021-05-21-15-14-09.bag
+
+wait for its done and a `.pbstream` file will generate，the run following command,
+
+Locate robot using same rosbag
+
+	$ roslaunch cartographer_mr500 demo_mr500_3d_localization.launch load_state_filename:=${ROSBAG_DIR}/2021-05-21-15-14-09.bag.pbstream bag_filename:=${ROSBAG_DIR}/2021-05-21-15-14-09.bag
+
+Locate robot using other rosbag
+
+	$ roslaunch cartographer_mr500 demo_mr500_3d_localization.launch load_state_filename:=${ROSBAG_DIR}/2021-05-21-15-14-09.bag.pbstream bag_filename:=${ROSBAG_DIR}/2021-05-21-15-03-45.bag
+
+### 6.5 .pbstream to pcd
+
+	$ roslaunch cartographer_mr500 offline_mr500_3d.launch bag_filenames:=${ROSBAG_DIR}/2021-11-29-15-26-33.bag
+
+wait for its done and a `.pbstream` file will generate，the run following command,
+	
+
+	$ roslaunch cartographer_mr500 assets_writer_mr500_3d.launch bag_filenames:=${ROSBAG_DIR}/2021-11-29-15-26-33.bag pose_graph_filename:=${ROSBAG_DIR}/2021-11-29-15-26-33.bag.pbstream
+	$ pcl_viewer 2021-11-29-15-26-33.bag_points.pcd
+
+
 
 ## Slave Computer
 

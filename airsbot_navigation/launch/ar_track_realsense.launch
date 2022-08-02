@@ -1,0 +1,22 @@
+<launch>
+
+	<include file="$(find realsense2_camera)/launch/rs_camera.launch"/>
+
+
+	<arg name="marker_size" default="7.05" /> 
+	<arg name="max_new_marker_error" default="0.01" /> 
+	<arg name="max_track_error" default="1.0" />
+	<arg name="cam_image_topic" default="/camera/color/image_rect" />  
+	<arg name="cam_info_topic" default="/camera/color/camera_info" />  
+	<arg name="output_frame" default="/camera_link" />  
+	<param name="/use_sim_time" value="false" />
+
+	<node name="ar_track_alvar" pkg="ar_track_alvar" type="individualMarkersNoKinect" respawn="false" output="screen"
+	 args="$(arg marker_size) $(arg max_new_marker_error) $(arg max_track_error) $(arg cam_image_topic) $(arg cam_info_topic) $(arg output_frame)" />
+
+	<node pkg="robot_setup_tf" type="tf_broadcaster_cartographer" name="tf_broadcaster_cartographer" output="screen">	     
+	</node>
+
+	<include file="$(find airsbot_description)/launch/urdf/display_airsbot.launch"/>
+</launch>
+ 

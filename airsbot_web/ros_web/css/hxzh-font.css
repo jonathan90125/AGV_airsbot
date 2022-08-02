@@ -1,0 +1,205 @@
+.title_box{
+    width: 1800px;
+    height: 60;
+    margin: auto;
+    border-color: darkgreen;
+    border-style: double;
+    font-size: 50px;
+    text-align: center;
+    margin-left: 0px;
+}
+
+.connect_box{
+    width: 800px;
+    height: 100px;
+    margin-top: 10px;
+    border-color: darkgreen;
+    border-style: double;
+}
+
+.url_text{
+    /* width: auto;
+    height: 100px; */
+    font-size: 20px;
+    width: auto;
+    height: auto;
+}
+
+.url_text_1{
+    width: 300px;
+    height: auto;
+    font-size: 16px;
+}
+
+.url_connect{
+    /* margin-left: 20px;     */
+    border-color: darkgreen;
+    padding: auto;
+    font-size: 20px;
+    cursor: pointer;/*变手形*/
+}
+
+.map_box{
+    width: 1280px;
+    height: 500px;
+    margin-top: 10px;
+    border-color: darkgreen;
+    border-style: double;
+}
+
+.cmd_box {
+    width: 500px;
+    height: 500px;
+    /* text-align: center; */
+    border-color: darkgreen;
+    border-style: double;
+    margin-top: -524px;
+    margin-left: 1300px;
+}
+
+/* 向上箭头 */
+.to_top {
+    cursor: pointer;/*变手形*/
+    border-bottom: 120px solid #f0f;
+    border-left: 120px solid transparent;
+    border-right: 120px solid transparent;
+    margin-left: 120px;
+    /* text-align: center; */
+}
+.to_top:active {
+	background-color: rgb(20, 224, 13);
+}
+
+/* 向左箭头 */
+.to_left {
+    cursor: pointer;/*变手形*/
+    border-right: 120px solid #ffd900;
+    border-top: 120px solid transparent;
+    border-bottom: 120px solid transparent;
+    margin-left: 0px;
+    margin-top: -10px;
+}
+.to_left:active {
+	background-color: rgb(20, 224, 13);
+}
+
+.to_stop{
+    width: 220px;
+    height: 220px;
+    background-color: rgb(223, 11, 64);
+    font-size: 50px;
+    cursor: pointer;/*变手形*/
+    text-align: center;
+    /* margin-top: 10px; */
+}
+.to_stop:active {
+	background-color: rgb(20, 224, 13);
+}
+
+/* 向右箭头 */
+.to_right {
+    width: 0;
+    height: 0;
+    cursor: pointer;/*变手形*/
+    border-left: 120px solid greenyellow;
+    border-top: 120px solid transparent;
+    border-bottom: 120px solid transparent;
+    margin-right: 0px;
+    /* margin-top: -100px; */
+}
+.to_right:active {
+	background-color: rgb(20, 224, 13);
+}
+
+/* 向下箭头 */
+.to_bottom {
+    cursor: pointer;/*变手形*/
+    border-top: 120px solid skyblue;
+    border-left: 120px solid transparent;
+    border-right: 120px solid transparent;
+    margin-left: 120px;
+    margin-top: -6px;
+}
+.to_bottom:active {
+	background-color: rgb(20, 224, 13);
+}
+
+.topic_box {
+    width: 1800px;
+    height: 160px;
+    border-color: darkgreen;
+    border-style: double;
+    /* text-align: center; */
+    /* margin: 0px auto; */
+}
+
+.box_savemap {
+    width: 200px;
+    height: 135px;
+    margin-left: 20px;    
+    margin-top: 20px;
+    border-color: darkgreen;
+    border-style: double;
+}
+
+.box_nav {
+    width: 200px;
+    height: 135px;
+    margin-left: 260px;           
+    margin-top: -141px;
+    border-color: darkgreen;
+    border-style: double;
+}
+
+.box_get_pose{
+    width: 200px;
+    height: 135px;
+    margin-left: 500px;           
+    margin-top: -141px;
+    border-color: darkgreen;
+    border-style: double;
+}
+
+.button_1 {
+    width: 160px;
+    height: 40px;
+    font-size: 20px; 
+    font-style: oblique;
+    font-family: Georgia, 'Times New Roman', Times, serif;
+    color: blueviolet;
+    cursor: pointer;/*变手形*/
+    margin-top: 10px;
+}
+button_1:active {
+	background-color: rgb(20, 224, 13);
+}
+
+.map_text{
+    width: 1000px;
+    height: 100px;
+    font-size: 20px;
+    color: magenta;
+    font-style: italic;
+    font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+    border-color: darkgreen;
+    border-style: double;
+    margin-top: -106px;
+    margin-left: 800px;
+}
+.map_path{
+    width: 650px;
+    height: 30px;
+    font-size: 16px;
+}
+
+.box_save_map{
+    width: 160px;
+    height: 40px;
+    font-size: 20px; 
+    font-style: oblique;
+    font-family: Georgia, 'Times New Roman', Times, serif;
+    color: blueviolet;
+    cursor: pointer;/*变手形*/
+    margin-top: 10px;
+    margin-left: 10px;
+}

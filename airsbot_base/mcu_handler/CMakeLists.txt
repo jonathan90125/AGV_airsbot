@@ -18,8 +18,7 @@ find_package(catkin REQUIRED COMPONENTS
 
 
 catkin_package(
-  INCLUDE_DIRS include
- 
+		INCLUDE_DIRS include
 )
 
 ###########
@@ -29,15 +28,15 @@ catkin_package(
 ## Specify additional locations of header files
 ## Your package locations should be listed before other locations
 include_directories(
-# include
-  ${catkin_INCLUDE_DIRS}
+		INCLUDE_DIRS include
+		${catkin_INCLUDE_DIRS}
  
 )
  
 
 
-add_executable(publish_node1 src/publish_node1.cpp 
+add_executable(mcu_node src/mcu_node.cpp 
 			    src/mbot_linux_serial.cpp
                             )
-target_link_libraries(publish_node1 ${catkin_LIBRARIES}   )
+target_link_libraries(mcu_node ${catkin_LIBRARIES}   )
 

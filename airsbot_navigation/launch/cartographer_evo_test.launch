@@ -1,0 +1,36 @@
+<launch>
+	<include file="$(find ltme_node)/launch/ltme02a.launch"/>
+	<include file="$(find astra_camera)/launch/astra.launch"/>
+	<include file="$(find airsbot_description)/launch/urdf/display_airsbot.launch"/>
+	 
+	<node name="landmark_publisher" pkg="landmark_publisher" type="landmark_publisher" respawn="false" output="screen"/>
+
+
+	<arg name="marker_size" default="10.0" /> 
+	<arg name="max_new_marker_error" default="0.01" /> 
+	<arg name="max_track_error" default="1.0" />
+	<arg name="cam_image_topic" default="/camera/rgb/image_rect_color" />  
+	<arg name="cam_info_topic" default="/camera/rgb/camera_info" />  
+	<arg name="output_frame" default="/camera_link" />  
+	<param name="/use_sim_time" value="false" />
+	<node name="ar_track_alvar" pkg="ar_track_alvar" type="individualMarkersNoKinect" respawn="false" output="screen"
+	args="$(arg marker_size) $(arg max_new_marker_error) $(arg max_track_error) $(arg cam_image_topic) $(arg cam_info_topic) $(arg output_frame)" />
+
+
+	<node pkg="mcu_handler" type="mcu_node" name="mcu_node" output="screen">
+	</node>
+
+
+	<node pkg="robot_setup_tf" type="tf_broadcaster_cartographer" name="tf_broadcaster_cartographer" output="screen">
+	</node>
+
+	<include file="$(find cartographer_ros)/launch/airsbot_localization.launch"/>
+	
+	<node pkg="cartographer_odom" type="odom_node" respawn="false" name="odom_node" output="screen"> 
+	</node>
+
+	<node pkg="tf" type="static_transform_publisher" name="mapworld"
+	    args="2.1 0.0 0.0 -1.57 0.0 0.0 /map /world 40" />
+ 
+
+</launch> 

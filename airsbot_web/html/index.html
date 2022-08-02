@@ -1,0 +1,336 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8" />
+<script type="text/javascript" src="/js/jquery-1.7.1.min.js"></script>
+<script type="text/javascript" src="http://static.robotwebtools.org/EventEmitter2/current/eventemitter2.min.js"></script>
+<script type="text/javascript" src="http://static.robotwebtools.org/roslibjs/current/roslib.min.js"></script>
+
+<script type="text/javascript" src="http://cdn.robotwebtools.org/EventEmitter2/current/eventemitter2.min.js"></script>
+<script type="text/javascript" src="http://cdn.robotwebtools.org/mjpegcanvasjs/current/mjpegcanvas.min.js"></script>
+
+<script src="https://static.robotwebtools.org/EaselJS/current/easeljs.js"></script>
+<script src="https://static.robotwebtools.org/EventEmitter2/current/eventemitter2.min.js"></script>
+<script src="https://static.robotwebtools.org/roslibjs/current/roslib.js"></script>
+<script src="../ros2djs/build/ros2d.js"></script>
+
+<script src="https://static.robotwebtools.org/threejs/current/three.js"></script>
+<script src="https://static.robotwebtools.org/threejs/current/ColladaLoader.js"></script>
+
+<script src="../ros3djs/build/ros3d.js"></script>
+<script src="../ros3djs/examples/js/ColladaLoader.js"></script> <!-- override the default ColladaLoader -->
+<script src="../mjpegcanvasjs/build/mjpegcanvas.js"></script>
+
+<link href="../css/hxzh-font.css" rel="stylesheet" type="text/css"/>
+
+<script type="text/javascript" type="text/javascript">
+  // Connecting to ROS
+  // -----------------
+  var ros = new ROSLIB.Ros({
+    // set this to false to use the new service interface to
+    // tf2_web_republisher. true is the default and means roslibjs
+    // will use the action interface
+    groovyCompatibility : true
+  });
+
+  // If there is an error on the backend, an 'error' emit will be emitted.
+  ros.on('error', function(error) {
+    document.getElementById('connecting').style.display = 'none';
+    document.getElementById('connected').style.display = 'none';
+    document.getElementById('closed').style.display = 'none';
+    document.getElementById('error').style.display = 'inline';
+    console.log(error);
+  });
+
+  // Find out exactly when we made a connection.
+  ros.on('connection', function() {
+    document.getElementById('connecting').style.display = 'none';
+    document.getElementById('error').style.display = 'none';
+    document.getElementById('closed').style.display = 'none';
+    document.getElementById('connected').style.display = 'inline';
+  });
+
+  ros.on('close', function() {
+    document.getElementById('connecting').style.display = 'none';
+    document.getElementById('connected').style.display = 'none';
+    document.getElementById('closed').style.display = 'inline';
+  });
+  // Create a connection to the rosbridge WebSocket server.
+  function connect()
+  { var urls = document.getElementById("URL").value;
+    // alert(urls)//'ws://localhost:9090'
+    ros.connect(urls);
+  }
+    
+  // Publishing a Topic
+  var cmdVel = new ROSLIB.Topic({
+    ros : ros,
+    name : '/cmd_vel',
+    messageType : 'geometry_msgs/Twist'
+  });//创建一个topic,它的名字是'/cmd_vel',,消息类型是'geometry_msgs/Twist'
+ 
+  var twist = new ROSLIB.Message({
+    linear : {
+      x : 0,
+      y : 0,
+      z : 0
+    },
+    angular : {
+      x : 0,
+      y : 0,
+      z : 0
+    }
+  });//创建一个message
+ 
+  function Forward()//在点击”Forward”按钮后发布消息，并对消息进行更改
+  {
+    twist.linear.x = twist.linear.x + 0.1;
+    cmdVel.publish(twist);//发布twist消息
+  }
+  function Back()
+  {
+    twist.linear.x = twist.linear.x - 0.1;
+    cmdVel.publish(twist);//发布twist消息
+  }
+  function Right()
+  {
+    twist.angular.z = twist.angular.z + 0.1;
+    cmdVel.publish(twist);//发布twist消息
+  }
+  function Left()
+  {
+    twist.angular.z = twist.angular.z - 0.1;
+    cmdVel.publish(twist);//发布twist消息
+  }
+  function Stop()
+  {
+    twist.linear.x = 0;
+    twist.linear.y = 0;
+    twist.linear.z = 0;
+    twist.angular.x = 0;
+    twist.angular.y = 0;
+    twist.angular.z = 0;
+    cmdVel.publish(twist);//发布twist消息
+  }
+
+  // 开始建图
+  var start_map = new ROSLIB.Topic({
+    ros : ros,
+    name : '/start_map',
+    messageType : 'robot_api/StartMap'
+  });
+
+  var bool_map = new ROSLIB.Message({
+    status : true
+  });//创建一个message
+
+  function startmap()
+  {
+    bool_map.status = true;
+    start_map.publish(bool_map);
+  }
+
+  // 停止建图
+  function stopmap()
+  {
+    bool_map.status = false;
+    start_map.publish(bool_map);
+  }
+
+  // 开始自主导航
+  var start_nav = new ROSLIB.Topic({
+    ros : ros,
+    name : '/start_nav',
+    messageType : 'robot_api/StartNav'
+  });
+
+  var bool_nav = new ROSLIB.Message({
+    status : true
+  });//创建一个message
+
+  function startnav()
+  {
+    bool_nav.status = true;
+    start_nav.publish(bool_nav);
+  }
+
+  // 停止建图
+  function stopnav()
+  {
+    bool_nav.status = false;
+    start_nav.publish(bool_nav);
+  }
+ 
+  //保存地图
+  var save_map = new ROSLIB.Topic({
+    ros : ros,
+    name : '/save_map',
+    messageType : 'robot_api/SaveMap'
+  });
+  var bool_save_map = new ROSLIB.Message({
+    status : true,
+    path : "/home/nova/ROS_WS/catkin_ws/hxzh_maps/hxzh_map"
+  });
+  function savemap()
+  {
+    bool_save_map.true;
+    var res = document.getElementById("map_path").value;
+    bool_save_map.path = res;
+    save_map.publish(bool_save_map);
+  }
+
+  // Subscribing to a Topic
+  var listener = new ROSLIB.Topic({
+    ros : ros,
+    name : '/chatter',
+    messageType : 'std_msgs/String'
+  });//创建一个topic,它的名字是'/chatter',,消息类型是'std_msgs/String'
+ 
+  function subscribe()//在点击”Subscribe”按钮后订阅'/chatter'的消息，并将其显示到网页中
+  {
+     listener.subscribe(function(message) {
+       document.getElementById("output").innerHTML = ('Received message on ' + listener.name + ': ' + message.data);
+     });
+  }
+ 
+  function unsubscribe()//在点击”Unsubscribe”按钮后取消订阅'/chatter'的消息
+  {
+     listener.unsubscribe();
+  }
+
+  function init() {
+
+    // Create the main viewer.
+    var viewer = new ROS3D.Viewer({
+      background : 000,
+      divID : 'map',
+      width : 640,
+      height : 500,
+      antialias : true,
+      cameraZoomSpeed : 2,
+      displayPanAndZoomFrame : 10
+    });
+
+  // Setup a client to listen to TFs.默认使用/base_link作为固定坐标系
+  var tfClient = new ROSLIB.TFClient({
+      ros : ros,
+      angularThres : 0.01,
+      transThres : 0.01,
+      rate : 10.0,
+      fixedFrame : 'map'
+    });
+
+    // Add a grid.
+    viewer.addObject(new ROS3D.Grid());
+
+  // map
+  var gridClient = new ROS3D.OccupancyGridClient({
+      ros : ros,
+      rootObject : viewer.scene
+    });
+
+    var cloudClient = new ROS3D.PointCloud2({
+        ros: ros,
+        tfClient: tfClient,
+        rootObject: viewer.scene,
+        topic: '/velodyne_points',
+        max_pts: 200000,
+        pointRatio: 3,
+        messageRatio: 2,
+        // material: { size: 7, sizeAttenuation: false, alphaTest: 0.5, transparent: true, map: texture },
+        material: { size: 3, sizeAttenuation: false },
+        // colorsrc: 'i', colormap: function(i) { return new THREE.Color(3*i,0,1-3*i); }
+        colorsrc: 'z', colormap: function(z) { z=z+2; return new THREE.Color(z,0,1-z); }
+    });
+
+    var cloudmapClient = new ROS3D.PointCloud2({
+        ros: ros,
+        tfClient: tfClient,
+        rootObject: viewer.scene,
+        topic: '/lio_sam/mapping/map_global',
+        max_pts: 20000000,
+        pointRatio: 2,
+        messageRatio: 1,
+        // material: { size: 7, sizeAttenuation: false, alphaTest: 0.5, transparent: true, map: texture },
+        material: { size: 1, sizeAttenuation: false },
+        // colorsrc: 'i', colormap: function(i) { return new THREE.Color(3*i,0,1-3*i); }
+        colorsrc: 'z', colormap: function(z) { z=z+2; return new THREE.Color(z,0,1-z); }
+    });
+
+// Setup the URDF client.
+var urdfClient = new ROS3D.UrdfClient({
+      ros : ros,
+      tfClient : tfClient,
+      path : 'http://resources.robotwebtools.org/',
+      rootObject : viewer.scene,
+    });
+
+    // Create the main viewer.
+    var viewer1 = new MJPEGCANVAS.Viewer({
+      divID : 'map',
+      host : 'localhost',
+      width : 640,
+      height : 500,
+      topic : '/camera/color/image_raw'
+    });
+  }
+</script>
+</head>
+<link href="../css/hxzh-font.css" rel="stylesheet" type="text/css"/>
+<body onload="init()">
+  <h1 class="title_box">SKS ROSWEB TEST1</h1>
+  <div class="connect_box">
+    <p class="url_text">URL: <input class="url_text_1" type="text" value="ws://localhost:9090" id="URL"/> 
+      <button class="url_connect"  onclick="connect()"><strong>Connect</strong></button>
+    </p>
+
+  <div id="statusIndicator">
+    <p id="connecting">
+      Connecting to rosbridge...
+    </p>
+    <p id="connected" style="color:#00D600; display:none">
+      Connected
+    </p>
+    <p id="error" style="color:#FF0000; display:none">
+      Error in the backend!
+    </p>
+    <p id="closed" style="display:none">
+      Connection closed.
+    </p>
+  </div>
+  </div>
+  <p class="map_text" style="text-indent:1em;">Map path: <input class="map_path" type="text" value="/home/nova/ROS_WS/catkin_ws/hxzh_maps/hxzh_map" id="map_path"/> 
+    <button  class="box_save_map" onclick="savemap()"><strong>SaveMap</strong></button>
+  </p>
+  <div class="map_box" id="map"></div>
+  <div id="mpjpg"></div><br>
+  <!-- <p id = "robot_tf"></p><br> -->
+  <div class="cmd_box">
+    <button class="to_top" onclick = "Forward()"></button>
+    <button class="to_left" onclick = "Left()"></button>
+    <button class="to_stop" onclick = "Stop()">Stop</button>
+    <button class="to_right" onclick = "Right()"></button>
+    <button class="to_bottom" onclick = "Back()"></button>
+  </div>
+  
+  <div class="topic_box">
+    <div class="box_savemap">
+      <button class="button_1"onclick = "startmap()">Start Map</button>
+      <button class="button_1"onclick = "stopmap()">Stop Map</button>
+    </div>
+    <div class="box_nav">
+      <button class="button_1"onclick = "startnav()">Start Nav</button>
+      <button class="button_1"onclick = "stopnav()">Stop Nav</button>
+    </div>
+    <div class="box_get_pose">
+      <button class="button_1" onclick = "subscribe()">Robot Pose</button>
+      <!-- <button class="button_1" onclick = "unsubscribe()">Unsubscribe</button> -->
+      <p id = "output"></p>
+    </div>
+  </div>
+
+  
+  
+
+</body>
+</html>

@@ -1,0 +1,23 @@
+<launch>
+
+	<include file="$(find astra_camera)/launch/astra.launch"/>
+
+    <!-- ar_track_alvar Node -->
+	<arg name="marker_size" default="7.05" /> 
+	<arg name="max_new_marker_error" default="0.08" />
+	<arg name="max_track_error" default="0.2" />
+
+	<node name="ar_track_alvar" pkg="ar_track_alvar" type="individualMarkersNoKinect" respawn="false" output="screen">
+        <param name="marker_size"           type="double" value="$(arg marker_size)" />
+        <param name="max_new_marker_error"  type="double" value="$(arg max_new_marker_error)" />
+        <param name="max_track_error"       type="double" value="$(arg max_track_error)" />
+        <param name="output_frame"          type="string" value="camera_link" />
+
+        <remap from="camera_image"  to="/camera/rgb/image_raw" />
+        <remap from="camera_info"   to="/camera/rgb/camera_info" />
+    </node>
+
+    <node name="rviz" pkg="rviz" type="rviz" args="-d $(find astra_camera)/rviz/astra_ar_track_alvar.rviz" output="screen"/>
+
+</launch>
+ 

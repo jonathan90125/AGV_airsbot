@@ -1,0 +1,10 @@
+<launch>
+
+   <master auto="start"/>
+    
+ 
+    <node pkg="airsbot_navigation" type="send_goal" respawn="false" name="send_goal" output="screen">
+    <rosparam file="$(find airsbot_navigation)/config/station.yaml" command="load" />
+ </node>
+
+</launch>  

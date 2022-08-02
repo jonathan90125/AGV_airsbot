@@ -1,0 +1,19 @@
+gmapping:
+roslaunch airsbot_navigation rosbag_gmapping.launch
+rosrun map_server map_saver map_bag1
+
+
+
+
+slam-toolbox:
+roslaunch slam_toolbox online_sync.launch
+rosrun slam_toolbox service_client
+
+
+
+
+cartographer:
+roslaunch cartographer_ros demo_revo_lds.launch
+rosservice call /write_state "{filename: /home/airs/airsbot/src/airsbot/airsbot_navigation/navigation_launch/maps/map_1f.pbstream}"
+ 
+

@@ -1,10 +1,10 @@
-#include "mbot_linux_serial.h"
+#include <mbot_linux_serial.h>
 
 using namespace std;
 using namespace boost::asio;
 //串口相关对象
 boost::asio::io_service iosev;
-boost::asio::serial_port sp(iosev, "/dev/ttyUSB0");
+boost::asio::serial_port sp(iosev, "/dev/ttyUSB1");
 boost::system::error_code err;
 /********************************************************
             串口发送接收相关常量、变量、共用体对象

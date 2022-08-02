@@ -25,6 +25,10 @@ include_directories(
 add_executable(cmdvel_publisher src/cmdvel_publisher.cpp)
 target_link_libraries(cmdvel_publisher ${catkin_LIBRARIES})
 
+add_executable(cmdvel_publisher_square src/cmdvel_publisher_square.cpp)
+target_link_libraries(cmdvel_publisher_square ${catkin_LIBRARIES})
+
+
 
 
 
