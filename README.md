@@ -127,7 +127,7 @@ If **protobuf** related issues occur, try the following steps.
 
 Framework
 
-<div align=center><img src=".\airsbot_doc\8.JPG" alt="77" width="700" /></div>    
+<div align=center><img src=".\airsbot_doc\8.jpg" alt="8" width="600" /></div>    
 
     $ cd /dev
     $ sudo chmod 777 ttyUSB0
@@ -216,7 +216,7 @@ Project IDE: Keil uVision5
 
 ### 4.2 Sensors
 
-<div align=center><img src=".\airsbot_doc\9.JPG" alt="77" width="700" /></div>    
+<div align=center><img src=".\airsbot_doc\9.jpg" alt="9" width="600" /></div>    
 
 
 
@@ -306,7 +306,7 @@ wait for its done and a `.pbstream` file will generate，the run following comma
 
 MCU adopts STM32F105VCT6 chip and is mainly responsible for the following contents，all the related code can be found in the folder **airsbot_firmware**: 
 
-<div align=center><img src=".\airsbot_doc\7.JPG" alt="77" width="700" /></div>    
+<div align=center><img src=".\airsbot_doc\7.jpg" alt="7" width="600" /></div>    
 
 ### Indoor
 
@@ -333,8 +333,8 @@ MCU adopts STM32F105VCT6 chip and is mainly responsible for the following conten
 
 ## Developing Process
 
-<div align=center><img src=".\airsbot_doc\10.JPG" alt="77" width="700" /></div>    
+<div align=center><img src=".\airsbot_doc\10.jpg" alt="10" width="600" /></div>    
 
 ## Demo
 
-![11](.\airsbot_doc\11.gif)
+<div align=center><img src=".\airsbot_doc\11.gif" alt="10" width="600" /></div>    
