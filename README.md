@@ -125,6 +125,10 @@ If **protobuf** related issues occur, try the following steps.
 
 ### 3.1. Run airsbot_base
 
+Framework
+
+<div align=center><img src=".\airsbot_doc\8.JPG" alt="77" width="700" /></div>    
+
     $ cd /dev
     $ sudo chmod 777 ttyUSB0
 
@@ -209,6 +213,12 @@ Project IDE: Keil uVision5
         $ checksum:  CRC-8
         $ end byte1: 0x0d
         $ end byte2: 0x0a
+
+### 4.2 Sensors
+
+<div align=center><img src=".\airsbot_doc\9.JPG" alt="77" width="700" /></div>    
+
+
 
 ## 5. Development Rules  
 
@@ -296,6 +306,8 @@ wait for its done and a `.pbstream` file will generate，the run following comma
 
 MCU adopts STM32F105VCT6 chip and is mainly responsible for the following contents，all the related code can be found in the folder **airsbot_firmware**: 
 
+<div align=center><img src=".\airsbot_doc\7.JPG" alt="77" width="700" /></div>    
+
 ### Indoor
 
 1.  Using CAN to communicate with in-wheel motor to read or set motor's real-time speed and position 
@@ -309,10 +321,20 @@ MCU adopts STM32F105VCT6 chip and is mainly responsible for the following conten
 ### Outdoor
 
 1.  Using CAN to communicate with in-wheel motor to read or set motor's real-time speed and position, motor type is different from indoor version, so the communication format is completely different
-2. Using CAN to communicate with battery to read the remaining power and other information，battery type is different from indoor version, so the communication format is completely different
-3. USART communication with IMU chip to read sensor information, and the specific communication content format is determined by IMU chip manufacturer 
-4. The ultrasonic module used is KS114, this module contains 8 probes, using USART communication to read ranging data
-5. WS2812B LED belt configuration. Since if using the CPU directly in the main loop to achieve PWM wave control for LED belt occupies too much resources, I use DMA+TIM method to generate the PWM wave needed.
-6. The real-time odometry calculation of differential chassis is completed by using the velocity read from motor 
-7. Implement remote control of the a SBUS protocol controller to the AGV
-8. USART RS485 communication with host computer, receiving host computer control instructions and sending back odometry and sensor information
+2.  Using CAN to communicate with battery to read the remaining power and other information，battery type is different from indoor version, so the communication format is completely different
+3.  USART communication with IMU chip to read sensor information, and the specific communication content format is determined by IMU chip manufacturer 
+4.  The ultrasonic module used is KS114, this module contains 8 probes, using USART communication to read ranging data
+5.  WS2812B LED belt configuration. Since if using the CPU directly in the main loop to achieve PWM wave control for LED belt occupies too much resources, I use DMA+TIM method to generate the PWM wave needed.
+6.  The real-time odometry calculation of differential chassis is completed by using the velocity read from motor 
+7.  Implement remote control of the a SBUS protocol controller to the AGV
+8.  USART RS485 communication with host computer, receiving host computer control instructions and sending back odometry and sensor information
+
+
+
+## Developing Process
+
+<div align=center><img src=".\airsbot_doc\10.JPG" alt="77" width="700" /></div>    
+
+## Demo
+
+![11](.\airsbot_doc\11.gif)
