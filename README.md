@@ -337,4 +337,6 @@ MCU adopts STM32F105VCT6 chip and is mainly responsible for the following conten
 
 ## Demo
 
+The gif may take some time to be loaded. 
+
 <div align=center><img src=".\airsbot_doc\11.gif" alt="10" width="600" /></div>    
